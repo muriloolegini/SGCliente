@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SGCliente.Infrastructure.Data;
 using SGCliente.UI.Web.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,13 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+var service = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ClienteContext>(options =>
+    options.UseSqlServer(service));
+
+/*builder.Services.AddDbContext<ClienteContext>(options =>
+    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));*/
 
 var app = builder.Build();
 
